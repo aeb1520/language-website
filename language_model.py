@@ -53,6 +53,7 @@ def user_interaction_text_and_story():
             word = input("Enter the word: ")
             word_bundle.append(word)
         
+        #new comments
         story = generate_text(" ".join(word_bundle))
 
         print("Here is the story")
