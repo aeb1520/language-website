@@ -12,15 +12,15 @@ openai.api_key = api_key
 
 #this gets weird kinda need to check later for variables declared
 def generate_text(prompt):
-    response = openai.completion.create(
-        #the version I am using
-        engine = "git-3.5-turbo",
+    response = openai.ChatCompletion.create(
+        #the version I am using1
+        engine = "gpt-3.5-turbo",
         max_tokens = 20,
         prompt=prompt
         
     )
 
-    return openai.choices[0].text.strip()
+    return response['choices'][0]['text'].strip()
 
 
 def user_interaction_text_and_story():
