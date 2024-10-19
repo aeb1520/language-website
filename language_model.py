@@ -56,7 +56,7 @@ def main():
     print("For 6-20 new words, we will give you a personalized story")
 
     user_interaction_text_and_story()
-    generate_text()
+    
 
 
 
