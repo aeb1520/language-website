@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
+import openai
 
 load_dotenv()
 
@@ -8,49 +8,56 @@ api_key = os.getenv('OPENAI_API_KEY')
 if api_key is None:
     raise ValueError("API key not found. Please check the .env file and make sure it's loaded correctly.")
 
-client = OpenAI(api_key=api_key)
+openai.api_key = api_key
 
 #this gets weird kinda need to check later for variables declared
 def generate_text(prompt):
-    response = client.Completion.create(
+    response = openai.completion.create(
         #the version I am using
         engine = "git-3.5-turbo",
-        max_words = 20,
-        user_input = user_input,
+        max_tokens = 20,
+        prompt=prompt
+        
     )
 
-    return client.choices[0].text.strip
+    return openai.choices[0].text.strip()
 
 
 def user_interaction_text_and_story():
     
-    count = input("Please enter the amount of lexicon you wish to learn about")
+    count = int(input("Please enter the amount of lexicon you wish to learn about"))
     #deal with different input here 1-3, 3 is an error (over max)
     if (count <= 5):
         word_bundle = [] 
-        for i in range (n):
+        for i in range (count):
             word = input("Enter the word: ")
-            word_bundle = word_bundle.append(word)
+            word_bundle.append(word)
 
         #an empty thing to store the sentences
         success_generation = []
-        for generate in word:
-            sentence = generate_text(word_bundle)
+        for generate in word_bundle:
+            sentence = generate_text(generate)
             success_generation.append(sentence)
 
         #printing
         print("Here are the sentences!")   
         for result in success_generation:
-            print(success_generation)
+            print(result)
     
+    #another story if the user wants to prompt
+    #specific story type
+    #click on the word to see the definition
     if (count > 5):
         word_bundle = [] 
-        for i in range (n):
+        for i in range (count):
             word = input("Enter the word: ")
-            word_bundle = word_bundle.append(word)
+            word_bundle.append(word)
         
-        story = []
-        for generate in story:
+        story = generate_text(" ".join(word_bundle))
+
+        print("Here is the story")
+        print(story)
+
 
 
 
@@ -66,6 +73,9 @@ def main():
     print("For 6-20 new words, we will give you a personalized story")
 
     user_interaction_text_and_story()
+
+if __name__ == "__main__":
+    main()
     
 
 
