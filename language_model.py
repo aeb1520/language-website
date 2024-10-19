@@ -46,6 +46,8 @@ def user_interaction_text_and_story():
 
 
 
+
+
 def main():
     print("Welcome come to our_website_name")
     print("This is your first ever intermediate language learning website!")
@@ -56,7 +58,7 @@ def main():
     print("For 6-20 new words, we will give you a personalized story")
 
     user_interaction_text_and_story()
-    generate_text()
+    
 
 
 
