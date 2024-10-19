@@ -12,15 +12,17 @@ openai.api_key = api_key
 
 #this gets weird kinda need to check later for variables declared
 def generate_text(prompt):
-    response = openai.ChatCompletion.create(
-        #the version I am using1
-        engine = "gpt-3.5-turbo",
-        max_tokens = 20,
-        prompt=prompt
-        
-    )
-
-    return response['choices'][0]['text'].strip()
+    try:
+        # Create a text completion request using the correct model and endpoint
+        response = openai.Completion.create(
+            model="gpt-3.5-turbo-chat",  # Make sure to use a chat-specific model
+            messages=[{"role": "user", "content": prompt}]
+        )
+        # Return the text response, correctly stripping any excess whitespace
+        return response['choices'][0]['text'].strip()
+    except Exception as e:
+        print(f"Error generating text: {str(e)}")
+        return None
 
 
 def user_interaction_text_and_story():
