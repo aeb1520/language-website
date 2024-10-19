@@ -43,6 +43,14 @@ def user_interaction_text_and_story():
         for result in success_generation:
             print(success_generation)
     
+    if (count > 5):
+        word_bundle = [] 
+        for i in range (n):
+            word = input("Enter the word: ")
+            word_bundle = word_bundle.append(word)
+        
+        story = []
+        for generate in story:
 
 
 
