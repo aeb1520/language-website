@@ -42,6 +42,8 @@ def user_interaction_text_and_story():
         print("Here are the sentences!")   
         for result in success_generation:
             print(success_generation)
+    
+
 
 
 def main():
@@ -54,6 +56,7 @@ def main():
     print("For 6-20 new words, we will give you a personalized story")
 
     user_interaction_text_and_story()
+    generate_text()
 
 
 
