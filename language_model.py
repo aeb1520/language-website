@@ -6,7 +6,7 @@ load_dotenv()
 
 api_key = os.getenv('OPENAI_API_KEY')
 if api_key is None:
-    raise ValueError("API key not found. Please set the OPENAI_API_KEY environment variable.")
+    raise ValueError("API key not found. Please check the .env file and make sure it's loaded correctly.")
 
 client = OpenAI(api_key=api_key)
 
