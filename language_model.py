@@ -51,7 +51,7 @@ def generate_story(vocab_list, language, topic, level, length):
 def generate_explanation(story, language, vocab_list):
     prompt = (
         f"Here is a story: {story} in {language} with the vocab words: {vocab_list}.\n"
-        "Please simplify this story while ensuring that the following vocabulary words are included: "
+        "Please simplify this story while ensuring that the vocabulary words are included: "
         f"{vocab_list}. Make it easier to understand."
     )
     response = client.chat.completions.create(
@@ -66,7 +66,7 @@ def generate_explanation(story, language, vocab_list):
 def generate_hard_version(story, language, vocab_list):
     prompt = (
         f"Here is a story: {story} in {language} with the vocab words: {vocab_list}.\n"
-        "Please make this story more complex and sophisticated while ensuring that the following vocabulary words are included: "
+        "Please make this story more complex while ensuring that the vocabulary words are included: "
         f"{vocab_list}."
     )
     
@@ -92,7 +92,7 @@ def explain_unknown_words(unknown_words):
     return explanations
 
 def process_version(story, language, vocab_list, version_type, unknown_list):
-    words = []
+    #words = []
     if version_type == "easier":
         easy_story = generate_explanation(story, language, vocab_list)
         print("\nHere is your story, but easier:\n")
@@ -101,8 +101,6 @@ def process_version(story, language, vocab_list, version_type, unknown_list):
         hard_story = generate_hard_version(story, language, vocab_list)
         print("\nHere is your story, but harder:\n")
         print(hard_story)
-
-        unknown_list.extend(words)
 
         syntax_easy = get_syntax(words)
         print("\nSyntactical Information for unknown words:\n")
@@ -116,10 +114,14 @@ def process_version(story, language, vocab_list, version_type, unknown_list):
         print("\nExplanations for unknown words:\n")
         for word, explanation in explanations.items():
             print(f"{word}: {explanation}")
+
+        unknown_list.extend(words)
+        
         syntax_hard = get_syntax(words)
         print("\nSyntactical Information for unknown words:\n")
         for word, info in syntax_hard.items():
             print(f"{word}: {info}")
+
 
 def get_syntax(unknown_words):
     syntax = {}
@@ -148,10 +150,9 @@ def main():
     while True:
         action = input("Do you want an easier or harder version of the story? (easier/harder/quit) ").strip().lower()
         if action == "quit":
+            print("\nWord list:")
+            print(", ".join(set(unknown_list))) 
             print("Thank you for using the program! Goodbye!")
-            if unknown_list:
-                print("Words for which definitions were requested:")
-                print(", ".join(set(unknown_list)))
             break
         elif action in ["easier", "harder"]:
             process_version(story, language, vocab_list, action, unknown_list)
