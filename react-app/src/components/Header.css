@@ -1,0 +1,14 @@
+.header {
+    display: flex;
+    justify-content: center; /* Centers the entire header content horizontally */
+    align-items: center;     /* Centers the content vertically */
+    position: relative;      /* Allows for absolute positioning of the user icon */
+    background-color: #D4F2D2;
+    padding: 20px;
+  }
+  
+  .website-name {
+    font-size: 2rem;
+    justify-content: space-between;
+    text-align: center;
+  }
