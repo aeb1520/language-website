@@ -143,8 +143,8 @@ def generate_list():
         max_tokens = 500,
     )
 
-    vocab_list = response.choices[0].message['content'].strip()
-    return vocab_list
+    quizlet_list = response.choices[0].message['content'].strip()
+    return quizlet_list
 
 def generate_sentence():
     prompt = f"Create an informal conversation using the words in context."
