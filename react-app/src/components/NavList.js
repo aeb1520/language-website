@@ -9,7 +9,7 @@ function NavList() {
   return (
     <nav>
       <ul className="nav-list">
-        <li><Link to="/">Home</Link></li>
+        <li><Link to="/">Beginner</Link></li>
         <li><Link to="/story">Story</Link></li>
         <li><Link to="/quiz">Quiz</Link></li>
       </ul>

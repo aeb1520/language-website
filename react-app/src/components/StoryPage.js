@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import './StoryPage.css';
-import TextBox2 from './TextBox2';
 
 function StoryPage() {
   const [level, setLevel] = useState("beginner");
@@ -12,7 +11,8 @@ function StoryPage() {
   };
 
   return (
-    <div className="story-page-container">
+
+
       <div className="level-select">
         <label>
           <input
@@ -47,11 +47,6 @@ function StoryPage() {
           Advanced
         </label>
       </div>
-
-  <div className="story-textbox">
-  <TextBox2 topic={topic} />  {}
-  </div>
-  </div>
   );
 }
 
