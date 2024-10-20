@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+import random
 
 load_dotenv()
 
@@ -38,7 +39,8 @@ def get_length():
 def generate_story(vocab_list, language, topic, level, length):
     prompt = (
         f"Write a {level} story in {language} with the style of {topic} with a maximum words of {length}"
-        f"that uses these vocab words: {vocab_list}."
+        f"that uses these vocab words: {vocab_list}"
+        f"also please make the story language learner friendly, and make sure the story is something that will help enhance the learner's understanding of the language."
     )
     response = client.chat.completions.create(
         model="gpt-4",
@@ -110,6 +112,7 @@ def process_version(story, language, vocab_list, version_type, unknown_list):
     unknown_response = input(f"Are there any words you don't know in the {version_type} version? (yes/no) ").strip().lower()
     if unknown_response == "yes":
         words = input("Please enter the words you don't know, separated by commas: ").strip().split(',')
+        words = [word.strip() for word in words]
         explanations = explain_unknown_words(words)
         print("\nExplanations for unknown words:\n")
         for word, explanation in explanations.items():
@@ -121,6 +124,9 @@ def process_version(story, language, vocab_list, version_type, unknown_list):
         print("\nSyntactical Information for unknown words:\n")
         for word, info in syntax_hard.items():
             print(f"{word}: {info}")
+
+        print("\nThe word list:")
+        print(", ".join(set(unknown_list)))
 
 
 def get_syntax(unknown_words):
@@ -135,6 +141,55 @@ def get_syntax(unknown_words):
         syntax[word] = response.choices[0].message.content
     return syntax
 
+#QUIZ FUNCTIONALITY
+def generate_sentence(vocab_word, language):
+    prompt = (
+        f"Please generate a sentence using the vocabulary word '{vocab_word}' in {language}. "
+        f"The sentence should be interesting, colloquial, and educational. "
+        f"It should also be vivid to achieve a more natural acquisition of the language. "
+        f"Additionally, the usage of '{vocab_word}' should be relatively easy to memorize and should "
+        f"help enhance memory over time."
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=100
+    )
+
+    sentence = response.choices[0].message.content
+    return sentence
+
+def correct_user_input(user_input):
+    prompt = (
+        f"Here's a my response: '{user_input}'. "
+        f"Please correct it if necessary and explain the usage of the vocab word in the sentence."
+    )
+    response = client.chat.completions.create(
+        model = "gpt-4",
+        messages = [{"role": "user", "content": prompt}],
+        max_tokens = 150
+    )
+    correction = response.choices[0].message
+    return correction 
+
+def interactive_conversation(vocab_list,language):
+    print("Let's start an informal conversation! I'll use one of the vocabularies in a sentence, and you respond using another vocab word.")
+    
+    for i, vocab_word in enumerate(vocab_list):
+        print(f"{generate_sentence(vocab_word,language)}")
+
+        user_input = input("Please type your response, enter 'quit' to:")
+
+        if user_input.strip().lower() == "quit":
+            print("Thank you for participating in the conversation! Goodbye!")
+            break
+
+        feedback = correct_user_input(user_input)
+        print(f"{feedback}")
+
+    print("Conversation finished!")
+
 def main():
     vocab_list = get_vocab_list()
     language = get_language()
@@ -145,14 +200,38 @@ def main():
     print("\nHere is your story:\n")
     print(story)
 
-    unknown_list =[]
+    unknown_list = []
+
+    unknown_response = input("Are there any words you don't know in the story? (yes/no) ").strip().lower()
+    if unknown_response == "yes":
+        first_new_words = input("Please enter the words you don't know, separated by commas: ").strip().split(',')
+        words = [word.strip() for word in first_new_words]
+
+    first_explanations = explain_unknown_words(first_new_words)
+    print("\nExplanations for unknown words:\n")
+    for word, explanation in first_explanations.items():
+        print(f"{word}: {explanation}")
+
+    unknown_list.extend(word)
+
+    syntax_info = get_syntax(word)
+    print("\nSyntactical Information for unknown words:\n")
+    for word, info in syntax_info.items():
+        print(f"{word}: {info}")
+
+    conversation = input("Would you like to have a conversation using the vocabulary? (yes/no) ").strip().lower()
+    if conversation == "yes":
+        interactive_conversation(vocab_list,language)
+    elif conversation == "no":
+        print("Thank you for using the program! Goodbye!")
+        return
     
     while True:
         action = input("Do you want an easier or harder version of the story? (easier/harder/quit) ").strip().lower()
         if action == "quit":
-            print("\nWord list:")
-            print(", ".join(set(unknown_list))) 
-            print("Thank you for using the program! Goodbye!")
+            #print("\nWord list:")
+            #print(", ".join(set(unknown_list))) 
+            #print("Thank you for using the program! Goodbye!")
             break
         elif action in ["easier", "harder"]:
             process_version(story, language, vocab_list, action, unknown_list)
