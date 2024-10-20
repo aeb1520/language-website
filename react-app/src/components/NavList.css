@@ -1,0 +1,18 @@
+/* NavList.css */
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .nav-list li {
+    display: inline;
+    margin: 0 15px;
+  }
+  
+  .nav-list a {
+    text-decoration: none;
+    color: #5a5a5a;
+    font-size: 18px;
+  }
+  
