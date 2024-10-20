@@ -1,88 +1,87 @@
 import os
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 
 load_dotenv()
 
-api_key = os.getenv('OPENAI_API_KEY')
-if api_key is None:
-    raise ValueError("API key not found. Please check the .env file and make sure it's loaded correctly.")
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key)
 
-openai.api_key = api_key
+def get_vocab_list():
+    vocab_list = input("Please enter a vocabulary list: ")
+    return vocab_list
 
-#this gets weird kinda need to check later for variables declared
-def generate_text(prompt):
-    try:
-        # Create a text completion request using the correct model and endpoint
-        response = openai.Completion.create(
-            model="gpt-3.5-turbo-chat",  # Make sure to use a chat-specific model
-            messages=[{"role": "user", "content": prompt}]
-        )
-        # Return the text response, correctly stripping any excess whitespace
-        return response['choices'][0]['text'].strip()
-    except Exception as e:
-        print(f"Error generating text: {str(e)}")
-        return None
+def get_language():
+    language = input("What is the language you want to learn: ")
+    return language
+
+def get_topic():
+    topic = input("What is the style of story you want: ")
+    return topic
+
+def get_level():
+    level = input("What is the level you want the output to be in: ")
+    return level
+
+def get_length():
+    while True:
+        try:
+            word_limit = int(input("What is the word limit for the story? "))
+            if word_limit > 0:
+                return word_limit
+            else:
+                print("Please enter a positive integer.")
+        except ValueError:
+            print("Please enter a valid integer.")
 
 
-def user_interaction_text_and_story():
+def generate_story(vocab_list, language, topic, level, length):
+    prompt = (
+        f"Write a {level} story in {language} with the style of {topic} with a maximum words of {length}"
+        f"that uses these vocab words: {vocab_list}."
+    )
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500
+    )
+    story = response.choices[0].message.content
+    return story
+
+def generate_explanation(story, language, vocab_list):
+    prompt = (
+        f"Here is a story: {story} in {language} with the vocab words: {vocab_list}.\n"
+        "Please simplify this story while ensuring that the following vocabulary words are included: "
+        f"{vocab_list}. Make it easier to understand."
+    )
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500
+    )
     
-    count = int(input("Please enter the amount of lexicon you wish to learn about"))
-    #deal with different input here 1-3, 3 is an error (over max)
-    if (count <= 5):
-        word_bundle = [] 
-        for i in range (count):
-            word = input("Enter the word: ")
-            word_bundle.append(word)
-
-        #an empty thing to store the sentences
-        success_generation = []
-        for generate in word_bundle:
-            sentence = generate_text(generate)
-            success_generation.append(sentence)
-
-        #printing
-        print("Here are the sentences!")   
-        for result in success_generation:
-            print(result)
-    
-    #another story if the user wants to prompt
-    #specific story type
-    #click on the word to see the definition
-    if (count > 5):
-        word_bundle = [] 
-        for i in range (count):
-            word = input("Enter the word: ")
-            word_bundle.append(word)
-        
-        #new comments
-        story = generate_text(" ".join(word_bundle))
-
-        print("Here is the story")
-        print(story)
-
-
-
-
+    explanation = response.choices[0].message.content 
+    return explanation
 
 
 def main():
-    print("Welcome come to our_website_name")
-    print("This is your first ever intermediate language learning website!")
-    print("This portion is dedicated to lexicon learning and practices you can do with them beyond")
-    print("Please enter the amount of new lexicons you want to learn (1-20), and we will give you niche sentences!")
-    print("Different numbers of lexicons are targeted towards different example sentences/stories.")
-    print("For 1-5 new words, we will give you example sentences")
-    print("For 6-20 new words, we will give you a personalized story")
-
-    user_interaction_text_and_story()
+    vocab_list = get_vocab_list()
+    language = get_language()
+    topic = get_topic()
+    level = get_level()
+    length = get_length()
+    story = generate_story(vocab_list, language, topic, level, length)
+    print("\nHere is your story:\n")
+    print(story)
+    
+    #ask if the user wants to have more explanation (basically easier version)
+    easy = input("Do you want an easier version of the story? (yes/no)").strip().lower()
+    if(easy == "yes"):
+        story_easy = generate_explanation(story, language, vocab_list)
+        print("\nHere is your story, but easier:\n")
+        print(story_easy)
+        
+    
 
 if __name__ == "__main__":
     main()
-    
-
-
-
-
-    
-
