@@ -11,7 +11,7 @@ function StoryGenerator() {
 	const generateStory = async () => {
     	setLoading(true); // Set loading state to true
     	try {
-        	const response = await axios.post('http://localhost:3000/generate_story', {  // Update with your Flask server's IP
+        	const response = await axios.post('http://localhost:8080/generate_story', {  // Update with your Flask server's IP
             	vocab_list: vocabList,
             	language: 'English',
             	topic: 'daily life',
@@ -21,7 +21,7 @@ function StoryGenerator() {
         	setStory(response.data.story);
     	} catch (error) {
         	console.error('Error generating story:', error);
-        	setStory('Error generating story, please try again.'); // Set error message
+        	setStory('Error generating story'); // Set error message
     	} finally {
         	setLoading(false); // Reset loading state
     	}

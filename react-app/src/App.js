@@ -7,14 +7,36 @@ import TextBox from './components/TextBox';
 import Dropdown from './components/Dropdown';
 import StoryPage from './components/StoryPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import MyComponent from './components/MyComponent';
+import LevelSelect from './components/LevelSelect';
+import StoryGenerator from './components/StoryGenerator';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Header />
-        <NavList />
+        <MainContent />
+        <LevelSelect />
+        <Dropdown />
+        <TextBox />  {/* Move this outside the Routes if needed on all pages */}
+        <Routes>
+        </Routes>
+        <MyComponent />
+        <StoryGenerator />
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
+/*
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Header />
         <MainContent />
         <Routes>
           <Route path="/" element={
@@ -24,11 +46,13 @@ function App() {
             </>
           } />
           <Route path="/story" element={<StoryPage />} />
-          {/* Add other routes like /quiz as needed */}
         </Routes>
+        <MyComponent />
+        <StoryGenerator />
       </div>
     </Router>
   );
 }
+  */
 
-export default App;
+//export default App;
