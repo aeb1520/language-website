@@ -7,10 +7,6 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
-def get_vocab_list():
-    vocab_list = input("Please enter a vocabulary list: ")
-    return vocab_list
-
 def get_language():
     language = input("What is the language you want to learn: ")
     return language
@@ -23,6 +19,10 @@ def get_level():
     level = input("What is the level you want the output to be in: ")
     return level
 
+def get_vocab_list():
+    vocab_list = input("Please enter a vocabulary list: ")
+    return vocab_list
+    
 def get_length():
     while True:
         try:
