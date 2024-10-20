@@ -63,6 +63,75 @@ def generate_explanation(story, language, vocab_list):
     explanation = response.choices[0].message.content 
     return explanation
 
+def generate_hard_version(story, language, vocab_list):
+    prompt = (
+        f"Here is a story: {story} in {language} with the vocab words: {vocab_list}.\n"
+        "Please make this story more complex and sophisticated while ensuring that the following vocabulary words are included: "
+        f"{vocab_list}."
+    )
+    
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500
+    )
+    
+    harder_story = response.choices[0].message.content 
+    return harder_story
+
+def explain_unknown_words(unknown_words):
+    explanations = {}
+    for word in unknown_words:
+        prompt = f"What does the word '{word}' mean?"
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=100
+        )
+        explanations[word] = response.choices[0].message.content
+    return explanations
+
+def process_version(story, language, vocab_list, version_type, unknown_list):
+    words = []
+    if version_type == "easier":
+        easy_story = generate_explanation(story, language, vocab_list)
+        print("\nHere is your story, but easier:\n")
+        print(easy_story)
+    elif version_type == "harder":
+        hard_story = generate_hard_version(story, language, vocab_list)
+        print("\nHere is your story, but harder:\n")
+        print(hard_story)
+
+        unknown_list.extend(words)
+
+        syntax_easy = get_syntax(words)
+        print("\nSyntactical Information for unknown words:\n")
+        for word, info in syntax_easy.items():
+            print(f"{word}: {info}")
+
+    unknown_response = input(f"Are there any words you don't know in the {version_type} version? (yes/no) ").strip().lower()
+    if unknown_response == "yes":
+        words = input("Please enter the words you don't know, separated by commas: ").strip().split(',')
+        explanations = explain_unknown_words(words)
+        print("\nExplanations for unknown words:\n")
+        for word, explanation in explanations.items():
+            print(f"{word}: {explanation}")
+        syntax_hard = get_syntax(words)
+        print("\nSyntactical Information for unknown words:\n")
+        for word, info in syntax_hard.items():
+            print(f"{word}: {info}")
+
+def get_syntax(unknown_words):
+    syntax = {}
+    for word in unknown_words:
+        prompt = f"Provide the parts of speech, conjugations, gender, tense, mode, tone, and any other relevant information for the word '{word}'."
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=150
+        )
+        syntax[word] = response.choices[0].message.content
+    return syntax
 
 def main():
     vocab_list = get_vocab_list()
@@ -73,15 +142,22 @@ def main():
     story = generate_story(vocab_list, language, topic, level, length)
     print("\nHere is your story:\n")
     print(story)
-    
-    #ask if the user wants to have more explanation (basically easier version)
-    easy = input("Do you want an easier version of the story? (yes/no)").strip().lower()
-    if(easy == "yes"):
-        story_easy = generate_explanation(story, language, vocab_list)
-        print("\nHere is your story, but easier:\n")
-        print(story_easy)
-        
-    
 
+    unknown_list =[]
+    
+    while True:
+        action = input("Do you want an easier or harder version of the story? (easier/harder/quit) ").strip().lower()
+        if action == "quit":
+            print("Thank you for using the program! Goodbye!")
+            if unknown_list:
+                print("Words for which definitions were requested:")
+                print(", ".join(set(unknown_list)))
+            break
+        elif action in ["easier", "harder"]:
+            process_version(story, language, vocab_list, action, unknown_list)
+        else:
+            print("Invalid input. Please enter 'easier', 'harder', or 'quit'.")    
+
+    
 if __name__ == "__main__":
     main()
