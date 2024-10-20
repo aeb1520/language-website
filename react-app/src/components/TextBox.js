@@ -26,15 +26,14 @@ function TextBox() {
   };
 
   return (
-    <div>
+    <div className = "textbox-container">
       <textarea 
         className="input-box" 
         placeholder="Enter your vocab list..."
         value={text}
         onChange={handleChange}
       />
-      <button onClick={handleSubmit}>Submit</button>
-      {result && <p>Result: {result}</p>}  {/* Display the result */} 
+      <button className="submit-btn">Submit</button>
     </div>
     // last piece (line 3 of 3) for outputting python text is the {result} line under the button stuff (I can't comment there)
   );

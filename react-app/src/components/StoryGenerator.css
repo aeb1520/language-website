@@ -1,0 +1,13 @@
+
+  .generate-story{
+    background-color: #4e9ca1;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .generate-story:hover {
+    background-color: #92d5d9;
+  }

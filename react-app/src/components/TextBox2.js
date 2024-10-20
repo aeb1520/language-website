@@ -1,7 +1,7 @@
 import React from 'react';
-import './TextBox.css';
+import './TextBox2.css';
 
-function TextBox() {
+function TextBox2() {
   return (
     <textarea 
       className="input-box2" 
@@ -10,4 +10,4 @@ function TextBox() {
   );
 }
 
-export default TextBox;
+export default TextBox2;

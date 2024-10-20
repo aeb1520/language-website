@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import './StoryPage.css';
-import TextBox2 from './TextBox2';
+import StoryGenerator from './StoryGenerator';
 
 function StoryPage() {
   const [level, setLevel] = useState("beginner");
@@ -47,12 +47,15 @@ function StoryPage() {
           Advanced
         </label>
       </div>
-
-  <div className="story-textbox">
-  <TextBox2 topic={topic} />  {}
-  </div>
+      <div>
+        	<StoryGenerator /> {/* Use the StoryGenerator component */}
+    	</div>
   </div>
   );
 }
 
 export default StoryPage;
+/*
+<div className="story-textbox">
+  <TextBox2 topic={topic} />  {}
+  </div>*/

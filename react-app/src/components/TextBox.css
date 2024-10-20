@@ -1,10 +1,31 @@
 /* TextBox.css */
 
+.textbox-container {
+  display: flex;
+  flex-direction: column;  /* Stack items vertically */
+  align-items: center;     /* Center them horizontally */
+  width: 100%;
+}
 .input-box {
     width: 60%;
     height: 150px;
     padding: 15px;
     font-size: 16px;
     border: 1px solid #ccc;
+    margin-bottom: 20px; 
+  }
+  .submit-btn {
+    margin-top: 10px;  /* Small space between text box and button */
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4e9ca1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
   
+  .submit-btn:hover {
+    background-color: #92d5d9;
+  }
