@@ -135,6 +135,57 @@ def get_syntax(unknown_words):
         syntax[word] = response.choices[0].message.content
     return syntax
 
+def generate_list():
+    prompt = "Can you put the words and the ones I asked about into a list in the format of: word1, definition1 \n word2, definition2, etc"
+    response = client.chat.completions.create(
+        model = "gpt-4",
+        messages = [{"role": "user", "content": prompt}],
+        max_tokens = 500,
+    )
+
+    vocab_list = response.choices[0].message['content'].strip()
+    return vocab_list
+
+def generate_sentence():
+    prompt = f"Create an informal conversation using the words in context."
+    response = client.chat.completions.create(
+        model = "gpt-4",
+        messages = [{"role": "user", "content": prompt}],
+        max_tokens = 100
+    )
+    sentence = response.choices[0].message['content'].strip()
+    return sentence
+
+def correct_user_input(user_input):
+    prompt = (
+        f"Here's a my response: '{user_input}'. "
+        f"Please correct it if necessary and explain the usage of the vocab word in the sentence."
+    )
+    response = client.chat.completions.create(
+        model = "gpt-4",
+        messages = [{"role": "user", "content": prompt}],
+        max_tokens = 150
+    )
+    correction = response.choices[0].message['content'].strip()
+    return correction 
+
+def interactive_conversation(vocab_list):
+    print("Let's start an informal conversation! I'll use one of the vocabularies in a sentence, and you respond using another vocab word.")
+    
+    for i, vocab_word in enumerate(vocab_list):
+        # Step 1: ChatGPT generates a sentence
+        print(f"{generate_sentence(vocab_word)}")
+
+        # Step 2: User provides a response
+        user_input = input("Please type your response:")
+
+        # Step 3: ChatGPT corrects the user and explains
+        feedback = correct_user_input(user_input)
+        print(f"{feedback}")
+
+        # Loop continues with next word
+    print("Conversation finished!")
+
 def main():
     vocab_list = get_vocab_list()
     language = get_language()
