@@ -4,7 +4,7 @@ from flask_cors import CORS
 from temporary_chatgpt_test import fancy_print  # Import your other file
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) 
 
 
 @app.route('/submit', methods=['POST'])
@@ -25,3 +25,6 @@ def submit():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# extra comment so I can commit the changes

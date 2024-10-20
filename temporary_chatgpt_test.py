@@ -25,7 +25,7 @@ def very_basic_test_function():
       {"role": "user", "content": "Hello! Could you solve 20 x 5?"}
     ]
   )
-  print("Assistant: " + completion.choices[0].message.content)
+  print("Assistant: " + completion.choices[0].message.content) 
 
 
 
@@ -44,3 +44,7 @@ def echo_word(text):
 
 def fancy_print(text):
    return ("This is the fancy print of the received text: " + text)
+
+
+
+# extra comment so I can commit the changes
