@@ -1,0 +1,46 @@
+/* QuizPage.css */
+
+.story-container {
+    text-align: center;
+    background-color: #e6f7e4;
+    padding: 20px;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  nav ul li {
+    margin: 0 15px;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  nav ul li a.active {
+    color: #6c63ff;
+    font-weight: bold;
+  }
+  
+  .level-select2 {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  
+  .level-select2 label {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .level-select2 input {
+    margin-right: 10px;
+  }
+  

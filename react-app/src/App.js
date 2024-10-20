@@ -5,7 +5,35 @@ import './App.css';
 import NavList from './components/NavList';
 import TextBox from './components/TextBox';
 import Dropdown from './components/Dropdown';
+import StoryPage from './components/StoryPage';
+import QuizPage from './components/QuizPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Header />
+        <NavList />
+        <MainContent />
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Dropdown />
+              <TextBox />
+            </>
+          } />
+          <Route path="/story" element={<StoryPage />} />
+          <Route path="/quiz" element={<QuizPage />} />
+          {/* Add other routes like /quiz as needed */}
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+/*
 function App() {
   return (
     <div className="App">
@@ -16,6 +44,6 @@ function App() {
       <TextBox />
     </div>
   );
-}
+}*/
 
 export default App;
