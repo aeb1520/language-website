@@ -12,7 +12,7 @@ client = OpenAI(api_key=api_key)
 app = Flask(__name__)
 
 # Enable CORS for all routes and specify allowed origins
-CORS(app, resources={r"/*": {"origins": "http://<127.0.0.1>:<3000>"}})
+CORS(app) #resources={r"/*": {"origins": "http://<127.0.0.1>:<3000>"}})
 
 @app.route('/generate_story', methods=['POST'])
 def generate_story():
